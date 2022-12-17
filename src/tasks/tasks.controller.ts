@@ -59,9 +59,9 @@ class TasksController implements Controller {
         this.task.findByIdAndDelete(id)
             .then((successResponse) => {
                 if (successResponse) {
-                    response.send(200);
+                    response.send((200).toString());
                 } else {
-                    response.send(404);
+                    response.send((404).toString());
                 }
             });
     }
