@@ -8,7 +8,10 @@ class App {
 
     constructor(controllers: Controller[]) {
         this.app = express();
-
+        const cors = require('cors');
+        this.app.use(cors({
+            origin: 'http://localhost:3001'
+        }));
         this.connectToTheDatabase();
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
@@ -35,7 +38,7 @@ class App {
             MONGO_USER,
             MONGO_PASSWORD,
         } = process.env;
-        mongoose.connect(`mongodb+srv://maroosek:Kupeczka1@cluster0.gw3n7mq.mongodb.net/?retryWrites=true&w=majority`);
+        mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@cluster0.gw3n7mq.mongodb.net/?retryWrites=true&w=majority`);
     }
 }
 
