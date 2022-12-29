@@ -11,7 +11,10 @@ class App {
 
     constructor(controllers: Controller[]) {
         this.app = express();
-
+        const cors = require('cors');
+        this.app.use(cors({
+            origin: 'http://localhost:3001'
+        }));
         this.connectToTheDatabase();
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
