@@ -1,10 +1,10 @@
 
 import HttpException from "./HttpException";
 
-class PostNotFoundException extends HttpException {
+class TaskNotFoundException extends HttpException {
     constructor(id: string) {
         super(404, `Post with id ${id} not found`);
     }
 }
 
-export default PostNotFoundException;
+export default TaskNotFoundException;

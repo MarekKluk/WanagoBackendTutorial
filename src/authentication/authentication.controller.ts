@@ -11,6 +11,8 @@ import LogInDto from './logIn.dto';
 import TokenData from "../interfaces/tokenData.interface";
 import User from "../users/user.interface";
 import DataStoredInToken from "../interfaces/dataStoredInToken";
+import RequestWithUser from "../interfaces/requestWithUser.interface";
+import authMiddleware from "../middleware/auth.middleware";
 
 class AuthenticationController implements Controller {
     public path = '/auth';
@@ -25,10 +27,15 @@ class AuthenticationController implements Controller {
         this.router.post(`${this.path}/register`, validationMiddleware(CreateUserDto), this.registration);
         this.router.post(`${this.path}/login`, validationMiddleware(LogInDto), this.loggingIn);
         this.router.post(`${this.path}/logout`, this.loggingOut);
+        this.router.get(`${this.path}/auth`, authMiddleware, this.getAuthenticatedUser);
+    }
+
+    private getAuthenticatedUser (request: RequestWithUser, response: express.Response) {
+        response.send(request.user)
     }
 
     private createToken(user: User): TokenData {
-        const expiresIn = 60 * 60; // an hour
+        const expiresIn = 60 * 60;
         const secret = process.env.JWT_SECRET;
         const dataStoredInToken: DataStoredInToken = {
             _id: user._id,
@@ -77,7 +84,7 @@ class AuthenticationController implements Controller {
     }
 
     private createCookie(tokenData: TokenData) {
-        return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}`;
+        return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn}; Path=/`;
     }
 
     private loggingOut = (request: express.Request, response: express.Response) => {

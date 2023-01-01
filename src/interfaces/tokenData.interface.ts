@@ -3,4 +3,4 @@ interface TokenData {
     expiresIn: number;
 }
 
-export default TokenData;v
+export default TokenData;
