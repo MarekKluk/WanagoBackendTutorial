@@ -4,7 +4,6 @@ import Task from './task.interface';
 
 const taskSchema = new mongoose.Schema({
     userId: String,
-    id: Number,
     title: String,
     completed: Boolean,
 });

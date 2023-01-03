@@ -19,8 +19,7 @@ class TaskController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(this.path, this.getAllTasks);
-        this.router.get(`${this.path}/:id`, this.getTaskById);
+        this.router.get(`${this.path}/:id`, authMiddleware, this.getAllAuthorsTasks);
         this.router
             .all(`${this.path}/*`, authMiddleware)
             .patch(`${this.path}/:id`, validationMiddleware(CreateTaskDto, true), this.modifyTask)
@@ -28,22 +27,11 @@ class TaskController implements Controller {
             .post(this.path, authMiddleware, validationMiddleware(CreateTaskDto), this.createTask);
     }
 
-    private getAllTasks = (request: express.Request, response: express.Response) => {
-        this.task.find()
+    private getAllAuthorsTasks = (request: express.Request, response: express.Response) => {
+        const userSearchedId = request.params.id
+        this.task.find({ userId:userSearchedId })
             .then((tasks) => {
                 response.send(tasks);
-            });
-    }
-
-    private getTaskById = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-        const id = request.params.id;
-        this.task.findById(id)
-            .then((task) => {
-                if (task) {
-                    response.send(task);
-                } else {
-                    next(new TaskNotFoundException(id));
-                }
             });
     }
 

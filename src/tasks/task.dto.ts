@@ -1,12 +1,9 @@
 
-import {IsBoolean, IsNumber, IsString} from 'class-validator';
+import {IsBoolean, IsString} from 'class-validator';
 
 class CreateTaskDto {
     @IsString()
     public userId: string;
-
-    @IsNumber()
-    public id: number;
 
     @IsString()
     public title: string;
